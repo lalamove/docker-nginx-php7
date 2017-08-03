@@ -209,11 +209,12 @@ RUN apt-get install -y pkg-config #libssl-dev # See (*3)
 RUN sudo apt-get install -q -y s3fs
 
 
-RUN sudo apt-get install -y -q nodejs
-
-RUN sudo npm install --g gulp
-RUN sudo npm install gulp laravel-elixir
-RUN sudo npm uninstall npm -g
+RUN sudo apt-get install -y -q nodejs \
+&& sudo ln -s `which nodejs` /usr/bin/node \
+&& sudo apt-get install -y npm \
+&& sudo npm install --g gulp \
+&& sudo npm install gulp laravel-elixir \
+&& sudo npm uninstall npm -g
 
 ####################################################
 RUN sudo apt-get install vim -y
