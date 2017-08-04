@@ -7,6 +7,7 @@ RUN apt-get update -y \
 && rm -rf /etc/nginx/sites-enabled/default \
 && mkdir /lalamove \
 && apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
+&& apt-get install -y netcat
 ####################################################
 
 
@@ -36,48 +37,50 @@ RUN wget -q -O- http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.d
 # Install nginx #
 ###################
 
-#RUN echo "deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx" >> /etc/apt/sources.list
-#RUN echo "deb-src http://nginx.org/packages/mainline/ubuntu/ trusty nginx"  >> /etc/apt/sources.list
-#RUN curl http://nginx.org/keys/nginx_signing.key | apt-key add -
-#RUN sudo apt-get update
-#RUN sudo apt-get install nginx build-essential -y
+RUN echo "deb http://nginx.org/packages/mainline/ubuntu/ xenial nginx" >> /etc/apt/sources.list
+RUN echo "deb-src http://nginx.org/packages/mainline/ubuntu/ xenial nginx"  >> /etc/apt/sources.list
+RUN curl http://nginx.org/keys/nginx_signing.key | apt-key add -
+RUN sudo apt-get update
+RUN sudo apt-get install nginx build-essential -y
+RUN sudo apt-get install nginx-module-geoip -y
 
-RUN export RUNLEVEL=1 \
-&& sed -i "s/^exit 101$/exit 0/" /usr/sbin/policy-rc.d \
-&& apt-get update \
-&& apt-get install software-properties-common python-software-properties -y \
-&& add-apt-repository ppa:nginx/stable -y \
-&& echo "deb-src http://ppa.launchpad.net/nginx/development/ubuntu xenial main" >> /etc/apt/sources.list \
-&& apt-get update \
-&& apt-get build-dep nginx -y \
-&& cd /opt \
-&& mkdir tempnginx \
-&& cd tempnginx \
-&& apt-get source nginx \
-&& dirs=./*/ \
-&& cd $(echo $dirs) \
-&& cd debian \
-&& sed  -i '/\thttp-geoip \\/d' rules \
-&& sed -i '0,/with-http_geoip_module=dynamic/ s/with-http_geoip_module=dynamic/with-http_geoip_module/' rules \
-&& cd libnginx-mod.conf \
-&& sed -i 's/load_module/#load_module/g' mod-http-geoip.conf \
-&& cd .. \
-&& cd .. \
-&& dpkg-buildpackage -uc -b \
-&& cd ../ \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install nginx-common_1.13.3-0+xenial1_all.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-dav-ext_1.13.3-0+xenial1_amd64.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-auth-pam_1.13.3-0+xenial1_amd64.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-echo_1.13.3-0+xenial1_amd64.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-geoip_1.13.3-0+xenial1_amd64.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-image-filter_1.13.3-0+xenial1_amd64.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-subs-filter_1.13.3-0+xenial1_amd64.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-upstream-fair_1.13.3-0+xenial1_amd64.deb \ 
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-xslt-filter_1.13.3-0+xenial1_amd64.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-mail_1.13.3-0+xenial1_amd64.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-stream_1.13.3-0+xenial1_amd64.deb \
-&& DEBIAN_FRONTEND=noninteractive dpkg --install nginx-full_1.13.3-0+xenial1_amd64.deb \
-&& service nginx stop
+
+#RUN export RUNLEVEL=1 \
+#&& sed -i "s/^exit 101$/exit 0/" /usr/sbin/policy-rc.d \
+#&& apt-get update \
+#&& apt-get install software-properties-common python-software-properties -y \
+#&& add-apt-repository ppa:nginx/stable -y \
+#&& echo "deb-src http://ppa.launchpad.net/nginx/development/ubuntu xenial main" >> /etc/apt/sources.list \
+#&& apt-get update \
+#&& apt-get build-dep nginx -y \
+#&& cd /opt \
+#&& mkdir tempnginx \
+#&& cd tempnginx \
+#&& apt-get source nginx \
+#&& dirs=./*/ \
+#&& cd $(echo $dirs) \
+#&& cd debian \
+#&& sed  -i '/\thttp-geoip \\/d' rules \
+#&& sed -i '0,/with-http_geoip_module=dynamic/ s/with-http_geoip_module=dynamic/with-http_geoip_module/' rules \
+#&& cd libnginx-mod.conf \
+#&& sed -i 's/load_module/#load_module/g' mod-http-geoip.conf \
+#&& cd .. \
+#&& cd .. \
+#&& dpkg-buildpackage -uc -b \
+#&& cd ../ \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install nginx-common_1.13.3-0+xenial1_all.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-dav-ext_1.13.3-0+xenial1_amd64.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-auth-pam_1.13.3-0+xenial1_amd64.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-echo_1.13.3-0+xenial1_amd64.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-geoip_1.13.3-0+xenial1_amd64.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-image-filter_1.13.3-0+xenial1_amd64.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-subs-filter_1.13.3-0+xenial1_amd64.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-upstream-fair_1.13.3-0+xenial1_amd64.deb \ 
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-http-xslt-filter_1.13.3-0+xenial1_amd64.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-mail_1.13.3-0+xenial1_amd64.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install libnginx-mod-stream_1.13.3-0+xenial1_amd64.deb \
+#&& DEBIAN_FRONTEND=noninteractive dpkg --install nginx-full_1.13.3-0+xenial1_amd64.deb \
+#&& service nginx stop
 
 ###################
 
