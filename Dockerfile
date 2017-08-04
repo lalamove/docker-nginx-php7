@@ -6,8 +6,7 @@ RUN apt-get update -y \
 && apt-get install curl -y \
 && rm -rf /etc/nginx/sites-enabled/default \
 && mkdir /lalamove \
-&& apt-get install -y sudo && rm -rf /var/lib/apt/lists/* \
-&& apt-get install -y netcat
+&& apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
 ####################################################
 
 
@@ -220,7 +219,9 @@ RUN sudo apt-get install -y -q nodejs \
 && sudo npm uninstall npm -g
 
 ####################################################
-RUN sudo apt-get install vim -y
+RUN sudo apt-get update \
+&& sudo apt-get install vim -y \
+&& DEBIAN_FRONTEND=noninteractive sudo apt-get install netcat -y
 RUN sed -i 's/\/run\/php\/php7\.0-fpm\.sock/127\.0\.0\.1:9000/g' /etc/php/7.0/fpm/pool.d/www.conf
 ####################################################
 COPY entry.sh /entry.sh
