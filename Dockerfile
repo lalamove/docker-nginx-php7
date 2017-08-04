@@ -6,7 +6,7 @@ RUN apt-get update -y \
 && apt-get install curl -y \
 && rm -rf /etc/nginx/sites-enabled/default \
 && mkdir /lalamove \
-&& apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
+&& apt-get install -y sudo && rm -rf /var/lib/apt/lists/* \
 && apt-get install -y netcat
 ####################################################
 
