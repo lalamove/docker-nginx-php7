@@ -104,7 +104,7 @@ COPY _htpasswd /etc/nginx/conf/_htpasswd
 
 COPY nginx.conf                      /etc/nginx/nginx.conf
 COPY entry.sh /entry.sh
-
+COPY phpcheck.sh /opt/docker/phpcheck.sh
 RUN rm -rf /etc/nginx/sites-available && rm -rf /etc/nginx/sites-enabled
 ####################################################
 ####    #   #   ####
