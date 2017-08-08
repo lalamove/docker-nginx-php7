@@ -197,7 +197,7 @@ COPY supervisor.conf /opt/docker/etc/supervisor.conf
 RUN apt-get update -y
 RUN apt-get install -y git curl python3.4 python-pip supervisor
 
-
+RUN mkdir -p /run/php
 ####################################################
 # added s3fs command
 RUN sudo apt-get install -y build-essential
