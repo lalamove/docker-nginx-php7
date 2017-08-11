@@ -95,6 +95,17 @@ RUN apk update && \
     pip install supervisor==$SUPERVISOR_VERSION && \
     rm -rf /var/cache/apk/*
 
+
+###################################################
+####   #   #  ####
+#   #  #   #  #   #
+####   #####  ####
+#      #   #  #
+#      #   #  #
+###################################################
+
+# DONT INSTALL MYSQLND
+
 RUN echo 'http://dl-cdn.alpinelinux.org/alpine/3.6/main' >> /etc/apk/repositories && \
     apk --update add \
         php7 \
@@ -110,9 +121,10 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/3.6/main' >> /etc/apk/repositorie
         php7-json \
         php7-mbstring \
         php7-mcrypt \
-        php7-mysqlnd \
-        php7-opcache \
+	php7-mysqli \
+	php7-opcache \
         php7-openssl \
+	php7-redis \
         php7-pdo \
         php7-pdo_mysql \
         php7-pdo_pgsql \
@@ -129,11 +141,12 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/3.6/main' >> /etc/apk/repositorie
         php7-pear \
     && apk add --no-cache pcre-dev@latest-stable && \
     apk add --no-cache --virtual .mongodb-ext-build-deps openssl-dev && \
-    pecl install redis && \
     pecl install mongodb && \
     pecl clear-cache && \
     apk del .mongodb-ext-build-deps && \
     rm -rf /var/cache/apk/*
+
+RUN echo "extension=mongodb.so" >> /etc/php7/php.ini
 
 ###################################################
 #USER docker
