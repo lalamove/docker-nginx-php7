@@ -146,7 +146,7 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/3.6/main' >> /etc/apk/repositorie
     apk del .mongodb-ext-build-deps && \
     rm -rf /var/cache/apk/*
 
-RUN echo "extension=mongodb.so" >> /etc/php7/php.ini
+COPY 00_mongo.ini /etc/php7/conf.d/
 
 ###################################################
 #USER docker
