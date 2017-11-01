@@ -146,6 +146,8 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/3.6/main' >> /etc/apk/repositorie
     apk del .mongodb-ext-build-deps && \
     rm -rf /var/cache/apk/*
 
+RUN sed -i "s/nobody/application/g" /etc/php7/php-fpm.d/www.conf
+
 COPY 00_mongo.ini /etc/php7/conf.d/
 
 ###################################################
