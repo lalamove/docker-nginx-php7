@@ -1,7 +1,7 @@
 #!/bin/bash
 
 user=application
-group=applictation
+group=application
 
 if [ x"$WRITABLE_PATHS" != x ]
 then
