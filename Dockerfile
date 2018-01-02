@@ -139,6 +139,8 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/3.6/main' >> /etc/apk/repositorie
         php7-zip \
         php7-dev \
         php7-pear \
+        php7-simplexml \
+        php7-tokenizer \
     && apk add --no-cache pcre-dev@latest-stable && \
     apk add --no-cache --virtual .mongodb-ext-build-deps openssl-dev && \
     pecl install mongodb && \
