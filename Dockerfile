@@ -167,5 +167,4 @@ RUN php -r "unlink('composer-setup.php');"
 #USER docker
 EXPOSE 80 443
 RUN dos2unix /entry.sh
-ENTRYPOINT ["/entry.sh"]
 CMD ["/entry.sh"]
