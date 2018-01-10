@@ -161,7 +161,7 @@ RUN sed -i "s/pm.start_servers = 2/pm.start_servers = 12/g" /etc/php7/php-fpm.d/
 RUN sed -i "s/pm.min_spare_servers = 1/pm.min_spare_servers = 8/g" /etc/php7/php-fpm.d/www.conf
 RUN sed -i "s/pm.max_spare_servers = 3/pm.max_spare_servers = 16/g" /etc/php7/php-fpm.d/www.conf
 RUN sed -i "s/;pm.max_requests/pm.max_requests/g" /etc/php7/php-fpm.d/www.conf
-RUN sed -i "s/;pm.status_path/pm.status_path/g" /etc/php7/php-fpm.d/www.conf
+RUN sed -i "s/;pm.status_path = \/status/pm.status_path = \/fpm_status/g" /etc/php7/php-fpm.d/www.conf
 
 
 COPY 00_mongo.ini /etc/php7/conf.d/
