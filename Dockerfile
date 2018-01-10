@@ -116,7 +116,9 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/3.6/main' >> /etc/apk/repositorie
         php7-fileinfo \
         php7-fpm \
         php7-gd \
+        php7-gmp \
         php7-iconv \
+        php7-imagick \
         php7-intl \
         php7-json \
         php7-mbstring \
